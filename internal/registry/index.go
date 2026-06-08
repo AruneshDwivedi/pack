@@ -11,10 +11,10 @@ import (
 )
 
 var (
-	validCharsPattern       = "[a-z0-9\\-.]+"
+	validCharsPattern         = "[a-z0-9\\-.]+"
 	validCharsPatternWithPort = "[a-z0-9\\-.:]+"
-	validCharsRegexp        = regexp.MustCompile(fmt.Sprintf("^%s$", validCharsPattern))
-	validCharsPortRegexp    = regexp.MustCompile(fmt.Sprintf("^%s$", validCharsPatternWithPort))
+	validCharsRegexp          = regexp.MustCompile(fmt.Sprintf("^%s$", validCharsPattern))
+	validCharsPortRegexp      = regexp.MustCompile(fmt.Sprintf("^%s$", validCharsPatternWithPort))
 )
 
 // IndexPath resolves the path for a specific namespace and name of buildpack
