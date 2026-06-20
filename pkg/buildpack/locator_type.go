@@ -120,6 +120,12 @@ func canBePackageRef(locator string) bool {
 }
 
 func canBeRegistryRef(locator string) bool {
+	// If the locator is a valid docker reference, it should be classified
+	// as PackageLocator, not RegistryLocator. The docker reference check
+	// (name.ParseReference) is more specific and takes priority.
+	if _, err := name.ParseReference(locator); err == nil {
+		return false
+	}
 	return registryPattern.MatchString(locator)
 }
 
