@@ -120,7 +120,25 @@ func canBePackageRef(locator string) bool {
 }
 
 func canBeRegistryRef(locator string) bool {
-	return registryPattern.MatchString(locator)
+	if !registryPattern.MatchString(locator) {
+		return false
+	}
+	// If the segment before the first "/" contains a dot, it looks like
+	// a Docker registry hostname (e.g. registry.com/path/name) rather
+	// than a Buildpack Registry ID (e.g. example/foo@1.0.0).
+	// Similarly, "localhost" with a port is a Docker registry.
+	// Let canBePackageRef handle these instead.
+	if i := strings.Index(locator, "/"); i > 0 {
+		host := locator[:i]
+		if strings.Contains(host, ".") {
+			return false
+		}
+		// localhost:port is a Docker registry, not a Buildpack Registry
+		if strings.HasPrefix(host, "localhost:") {
+			return false
+		}
+	}
+	return true
 }
 
 func isFoundInBuilder(locator string, candidates []dist.ModuleInfo) bool {
